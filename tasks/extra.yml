@@ -1,0 +1,27 @@
+- name: Enable Ethernet over USB type C
+  block:
+    - name: Add dwc2 overlay to config.txt
+      lineinfile:
+        dest: /boot/config.txt
+        line: 'dtoverlay=dwc2'
+    - name: Add dwc2 modules-load to cmdline.txt
+      replace:
+        dest: /boot/cmdline.txt
+        regexp: 'rootwait(?! \bmodules-load=dwc2,g_ether\b)'
+        replace: 'rootwait modules-load=dwc2,g_ether'
+
+- name: Enable UART for status LED
+  lineinfile:
+    dest: /boot/config.txt
+    line: 'enable_uart=1'
+
+- name: Setup Power Off button
+  block:
+    - name: Clone pi-power-button repo
+      git:
+        repo: https://github.com/Howchoo/pi-power-button.git
+        dest: /home/pi/pi-power-button
+        clone: yes
+        update: yes
+    - name: Run repo install script
+      shell: ./pi-power-button/script/install

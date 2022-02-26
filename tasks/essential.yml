@@ -1,0 +1,37 @@
+- name: Update & Upgrade packages
+  apt:
+    update_cache: yes
+    upgrade: full
+    state: latest
+
+- name: Install essential packages
+  package:
+    name:
+      - vim
+      - git
+      - htop
+      - neofetch
+    state: latest
+
+- name: Install Raspberry Pi packages
+  package:
+    name:
+      - rpi-eeprom
+    state: latest
+
+- name: Update EEPROM
+  command: rpi-eeprom-update -a
+  register: eeprom_update
+  changed_when: eeprom_update.rc == 1
+  failed_when: eeprom_update.rc != 1 and eeprom_update.rc != 0
+  # ignore_errors: yes
+
+- name: Copy dot files
+  copy:
+    src: "{{ item }}"
+    dest: /home/pi
+    owner: pi
+    group: pi
+    mode: '0644'
+  with_fileglob:
+    - ./files/.*
