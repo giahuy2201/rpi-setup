@@ -1,0 +1,7 @@
+# Unwanted macOS files
+*.DS_Store
+*.LSOverride
+Thumbs.db
+
+# Ansible files
+roles
