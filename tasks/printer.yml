@@ -1,0 +1,21 @@
+- name: Install CUPS and Brother drivers
+  package:
+    name:
+      - cups
+      - printer-driver-brlaser
+    state: latest
+
+- name: Setup lpadmin group
+  user:
+    name: pi
+    groups: lpadmin
+    append: yes
+
+- name: Setup remote connecting to any
+  shell: cupsctl --remote-any
+  become: yes
+
+- name: Restart CUPS
+  systemd:
+    name: cups
+    state: restarted
