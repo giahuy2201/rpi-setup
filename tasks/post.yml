@@ -1,3 +1,4 @@
 - name: Reboot to update EEPROM
   reboot:
   when: eeprom_update.rc == 1
+  tags: ["piOS"]

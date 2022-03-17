@@ -1,0 +1,11 @@
+- name: Install Pi-Hole
+  block:
+    - name: Clone Pi-Hole repo
+      git:
+        repo: https://github.com/pi-hole/pi-hole.git
+        dest: "/home/{{ ansible_user }}/pi-hole"
+        clone: yes
+        update: yes
+    # - name: Run repo install script
+    #   shell: sudo ./pi-hole/automated\ install/basic-install.sh
+  tags: ["piOS"]

@@ -3,6 +3,7 @@
     update_cache: yes
     upgrade: full
     state: latest
+  tags: ["linux"]
 
 - name: Install essential packages
   package:
@@ -13,12 +14,14 @@
       - neofetch
       - screen
     state: latest
+  tags: ["linux"]
 
 - name: Install Raspberry Pi packages
   package:
     name:
       - rpi-eeprom
     state: latest
+  tags: ["piOS"]
 
 - name: Update EEPROM
   command: rpi-eeprom-update -a
@@ -26,13 +29,15 @@
   changed_when: eeprom_update.rc == 1
   failed_when: eeprom_update.rc != 1 and eeprom_update.rc != 0
   # ignore_errors: yes
+  tags: ["piOS"]
 
 - name: Copy dot files
   copy:
     src: "{{ item }}"
-    dest: /home/pi
-    owner: pi
-    group: pi
+    dest: "/home/{{ ansible_user }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     mode: '0644'
   with_fileglob:
     - ./files/.*
+  tags: ["linux"]
